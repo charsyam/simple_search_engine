@@ -45,13 +45,13 @@ class EnglishAnalyzer:
 
         return target
 
-    def tokens(self, raw, fp):
+    def tokens(self, raw, filename):
         raw_tokens = raw.split()
         filtered_tokens = self.transfer(raw_tokens)
         stemmed_tokens = self.stemming(filtered_tokens)
         final_tokens = self.remove_unused_words(stemmed_tokens)
 
-        return [(token, fp) for token in final_tokens]
+        return [(token, [filename]) for token in final_tokens]
 
     def transfer(self, raws):
         raw_tokens = [self.do_filters(w) for w in raws] 
