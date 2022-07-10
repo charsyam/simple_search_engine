@@ -1,6 +1,7 @@
 import os.path
 from os import path
 import json
+import math
 
 class IndexReader:
     def __init__(self, indexname):
@@ -28,5 +29,23 @@ class IndexReader:
         for t in terms:
             if t in self.tokens:
                 ret.append((t, self.tokens[t]))
+
+        return ret
+
+    def tfidf(self, token):
+        ret = []
+        df = len(token)
+        for t in token.keys():
+            tf = token[t] 
+            idf = math.log(float(self.doc_count)/float(df))
+            ret.append((tf*idf, t))
+        
+        return sorted(ret, key = lambda x: x[0], reverse=True)
+
+    def tfidf_query(self, terms):
+        ret = []
+        for t in terms:
+            if t in self.tokens:
+                ret.append((t, self.tfidf(self.tokens[t])))
 
         return ret

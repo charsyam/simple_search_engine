@@ -26,13 +26,16 @@ class IndexWriter:
     def sort_tokens(self, tokens): 
         return sorted(tokens, key=lambda x : x[0])
 
-    def update_docs(self, doclist1, doclist2):
-        ret = []
-        ret.extend(doclist1)
+    def update_docs(self, docmap1, docmap2):
+        ret = {}
+        for k in docmap1.keys():
+            ret[k] = docmap1[k]
 
-        for d2 in doclist2:
-            if d2 not in ret:
-                ret.append(d2)
+        for k in docmap2.keys():
+            if k not in ret:
+                ret[k] = docmap2[k]
+            else:
+                ret[k] += docmap2[k]
 
         return ret
 

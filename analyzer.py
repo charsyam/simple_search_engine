@@ -51,7 +51,7 @@ class EnglishAnalyzer:
         stemmed_tokens = self.stemming(filtered_tokens)
         final_tokens = self.remove_unused_words(stemmed_tokens)
 
-        return [(token, [filename]) for token in final_tokens]
+        return [(token, {filename: 1}) for token in final_tokens]
 
     def transfer(self, raws):
         raw_tokens = [self.do_filters(w) for w in raws] 
