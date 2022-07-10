@@ -1,13 +1,14 @@
 import os.path
 from os import path
 import json
-import math
+
 
 class IndexReader:
-    def __init__(self, indexname):
+    def __init__(self, indexname, query_handler):
         self.indexname = indexname
         self.doc_count = 0
         self.tokens = None
+        self.query_handler = query_handler
         self.load()
 
     def load(self):
@@ -25,27 +26,4 @@ class IndexReader:
             self.tokens[token[0]] = token[1]
 
     def query(self, terms):
-        ret = []
-        for t in terms:
-            if t in self.tokens:
-                ret.append((t, self.tokens[t]))
-
-        return ret
-
-    def tfidf(self, token):
-        ret = []
-        df = len(token)
-        for t in token.keys():
-            tf = token[t] 
-            idf = math.log(float(self.doc_count)/float(df))
-            ret.append((tf*idf, t))
-        
-        return sorted(ret, key = lambda x: x[0], reverse=True)
-
-    def tfidf_query(self, terms):
-        ret = []
-        for t in terms:
-            if t in self.tokens:
-                ret.append((t, self.tfidf(self.tokens[t])))
-
-        return ret
+        return self.query_handler.query(self.doc_count, self.tokens, terms)
